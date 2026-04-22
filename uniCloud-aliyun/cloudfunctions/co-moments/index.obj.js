@@ -87,19 +87,27 @@ module.exports = {
 
       const { familyId, content, images, location } = data;
       if (!familyId) return { code: 400, msg: 'familyId不能为空' };
-      if (!content || !content.trim()) return { code: 400, msg: '动态内容不能为空' };
-      if (content.length > 500) return { code: 400, msg: '动态内容最多500字' };
+      if ((!content || !content.trim()) && (!images || images.length === 0)) {
+        return { code: 400, msg: '动态内容或图片不能为空' };
+      }
+      if (content && content.length > 500) return { code: 400, msg: '动态内容最多500字' };
 
       const memberRes = await db.collection('familyMember')
         .where({ familyId, userId: uid, isDeleted: false }).get();
       if (!memberRes.data || !memberRes.data.length) return { code: 403, msg: '不是家族成员' };
 
+      // 解析 location：前端传字符串则直接存，object 则取 address
+      let locationStr = null
+      if (location) {
+        locationStr = typeof location === 'string' ? location : (location.address || '')
+      }
+
       const momentData = {
         familyId,
         authorId: uid,
-        content: content.trim(),
+        content: content ? content.trim() : '',
         images: images || [],
-        location: location || null,
+        location: locationStr,
         likeCount: 0,
         commentCount: 0,
         createTime: Date.now(),

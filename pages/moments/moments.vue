@@ -4,24 +4,30 @@
       <view class="cover-bg"></view>
       <view class="cover-content">
         <view class="cover-info">
-          <text class="cover-name">张氏家族</text>
-          <text class="cover-sub">家族动态</text>
+          <text class="cover-name">{{ familyName }}</text>
+          <text class="cover-sub">家族动态 · {{ moments.length }}条</text>
         </view>
         <view class="publish-btn" @tap="goPublish">
-          <text class="pub-icon">📷</text>
+          <text class="pub-icon">✏️</text>
           <text class="pub-text">发动态</text>
         </view>
       </view>
     </view>
 
     <!-- Loading state -->
-    <view v-if="loading" class="state-wrap">
+    <view v-if="loading && moments.length === 0" class="state-wrap">
+      <view class="loading-spinner"></view>
       <text class="state-text">加载中...</text>
     </view>
 
     <!-- Empty state -->
-    <view v-else-if="moments.length === 0" class="state-wrap">
-      <text class="state-text">暂无动态</text>
+    <view v-else-if="!loading && moments.length === 0" class="state-wrap">
+      <text class="empty-icon">📭</text>
+      <text class="empty-title">暂无动态</text>
+      <text class="empty-desc">快来发布第一条家族动态吧</text>
+      <view class="empty-action" @tap="goPublish">
+        <text class="empty-btn">发布动态</text>
+      </view>
     </view>
 
     <!-- Moments list -->
@@ -44,7 +50,7 @@
         </view>
 
         <view class="card-body">
-          <text class="post-text">{{ item.content }}</text>
+          <text v-if="item.content" class="post-text">{{ item.content }}</text>
 
           <view v-if="item.images && item.images.length > 0" class="img-grid" :class="'grid-' + Math.min(item.images.length, 3)">
             <image
@@ -53,6 +59,7 @@
               class="img-item-img"
               :src="img"
               mode="aspectFill"
+              @tap="previewImage(item.images, i)"
             />
           </view>
 
@@ -65,11 +72,11 @@
         <view class="card-bottom">
           <view class="action-btn" :class="{liked: item.isLiked}" @tap="handleLike(item)">
             <text class="action-emoji">{{ item.isLiked ? '❤️' : '🤍' }}</text>
-            <text class="action-num">{{ item.likes }}</text>
+            <text class="action-num">{{ item.likes || 0 }}</text>
           </view>
-          <view class="action-btn" @tap="goComment">
+          <view class="action-btn" @tap="goComment(item)">
             <text class="action-emoji">💬</text>
-            <text class="action-num">{{ item.comments }}</text>
+            <text class="action-num">{{ item.comments || 0 }}</text>
           </view>
         </view>
       </view>
@@ -78,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onShow } from 'vue'
 import { getMoments, likeMoment } from '@/api/moments.ts'
 
 interface MomentAuthor {
@@ -102,6 +109,7 @@ interface Moment {
 const moments = ref<Moment[]>([])
 const loading = ref(true)
 const liking = ref(false)
+const familyName = ref('家族动态')
 
 const fetchMoments = async () => {
   loading.value = true
@@ -113,7 +121,7 @@ const fetchMoments = async () => {
       uni.showToast({ title: res.msg || '获取动态失败', icon: 'none' })
     }
   } catch (error) {
-    uni.showToast({ title: '网络错误', icon: 'none' })
+    // 网络错误不打扰用户，静默
   } finally {
     loading.value = false
   }
@@ -146,26 +154,34 @@ const handleLike = async (item: Moment) => {
     const res = await likeMoment(item._id)
     if (res.code === 0) {
       item.isLiked = !item.isLiked
-      item.likes += item.isLiked ? 1 : -1
+      item.likes = Math.max(0, item.likes + (item.isLiked ? 1 : -1))
     } else {
       uni.showToast({ title: res.msg || '操作失败', icon: 'none' })
     }
-  } catch (error) {
-    uni.showToast({ title: '网络错误', icon: 'none' })
+  } catch {
+    // 静默
   } finally {
     liking.value = false
   }
+}
+
+const previewImage = (images: string[], index: number) => {
+  uni.previewImage({ urls: images, current: index })
 }
 
 const goPublish = () => {
   uni.navigateTo({ url: '/pages/moments/moments-publish' })
 }
 
-const goComment = () => {
+const goComment = (item: Moment) => {
   uni.showToast({ title: '评论功能开发中', icon: 'none' })
 }
 
 onMounted(() => {
+  fetchMoments()
+})
+
+onShow(() => {
   fetchMoments()
 })
 </script>
@@ -230,6 +246,7 @@ onMounted(() => {
 
 .state-wrap {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 120rpx 0;
@@ -237,7 +254,40 @@ onMounted(() => {
   .state-text {
     font-size: 28rpx;
     color: #999;
+    margin-top: 20rpx;
   }
+
+  .empty-icon { font-size: 100rpx; margin-bottom: 16rpx; }
+  .empty-title {
+    font-size: 32rpx;
+    font-weight: 600;
+    color: #2C2C2C;
+    margin-bottom: 12rpx;
+  }
+  .empty-desc {
+    font-size: 26rpx;
+    color: #999;
+    margin-bottom: 48rpx;
+  }
+  .empty-action {
+    padding: 20rpx 48rpx;
+    background: #2D8B4E;
+    border-radius: 40rpx;
+    .empty-btn { font-size: 28rpx; font-weight: 600; color: #FFFFFF; }
+  }
+}
+
+.loading-spinner {
+  width: 56rpx;
+  height: 56rpx;
+  border: 4rpx solid #E8E4DC;
+  border-top-color: #2D8B4E;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 .moments-list {
@@ -351,7 +401,7 @@ onMounted(() => {
     &:active { background: #F5F2EE; }
 
     &.liked {
-      .action-emoji { animation: heartBeat 0.3s ease; }
+      .action-emoji { animation: heartPop 0.35s ease; }
     }
 
     .action-emoji { font-size: 28rpx; }
@@ -359,8 +409,10 @@ onMounted(() => {
   }
 }
 
-@keyframes heartBeat {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.3); }
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.4); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); }
 }
 </style>

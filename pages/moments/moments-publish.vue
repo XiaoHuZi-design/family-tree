@@ -169,22 +169,50 @@ const handleCancel = () => {
 const uploadImages = async (): Promise<string[]> => {
   const uploadedUrls: string[] = []
   for (const img of images.value) {
-    if (!img.isPlaceholder && !img.url.startsWith('http')) {
+    if (!img.isPlaceholder && !img.url.startsWith('http') && !img.url.startsWith('cloud://')) {
       try {
         const uploadRes: any = await new Promise((resolve, reject) => {
           uniCloud.uploadFile({
             filePath: img.url,
             cloudPath: `moments/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.jpg`,
-            success: (res: any) => resolve(res),
+            success: (res: any) => {
+              // 统一转真实 URL（cloud:// → https）
+              if (res.fileID?.startsWith('cloud://')) {
+                uniCloud.getFileURL({
+                  fileID: res.fileID,
+                  success: (urlRes: any) => resolve(urlRes.fileID),
+                  fail: () => resolve(res.fileID)
+                })
+              } else {
+                resolve(res.fileID)
+              }
+            },
             fail: (err: any) => reject(err)
           })
         })
-        uploadedUrls.push(uploadRes.fileID)
+        uploadedUrls.push(uploadRes)
       } catch (error) {
         console.error('Image upload failed:', error)
+        uni.showToast({ title: '图片上传失败', icon: 'none' })
       }
-    } else if (img.url.startsWith('http')) {
-      uploadedUrls.push(img.url)
+    } else if (img.url.startsWith('http') || img.url.startsWith('cloud://')) {
+      // cloud:// 需要先转换
+      if (img.url.startsWith('cloud://')) {
+        try {
+          const realUrl: any = await new Promise((resolve, reject) => {
+            uniCloud.getFileURL({
+              fileID: img.url,
+              success: (res: any) => resolve(res.fileID),
+              fail: () => resolve(img.url)
+            })
+          })
+          uploadedUrls.push(realUrl)
+        } catch {
+          uploadedUrls.push(img.url)
+        }
+      } else {
+        uploadedUrls.push(img.url)
+      }
     }
   }
   return uploadedUrls
@@ -283,6 +311,7 @@ const handlePublish = async () => {
     font-size: 32rpx;
     color: #2C2C2C;
     line-height: 1.8;
+    caret-color: #2D8B4E;
   }
 
   .char-count {
@@ -291,6 +320,9 @@ const handlePublish = async () => {
     right: 32rpx;
     font-size: 24rpx;
     color: #999;
+
+    &.near-limit { color: #E65100; }
+    &.at-limit { color: #C0392B; font-weight: 600; }
   }
 }
 
@@ -366,9 +398,16 @@ const handlePublish = async () => {
   justify-content: center;
   background: #F8F6F2;
   gap: 8rpx;
+  transition: all 0.2s ease;
 
-  .add-icon { font-size: 56rpx; font-weight: 300; color: #999; }
-  .add-text { font-size: 24rpx; color: #999; }
+  &:active {
+    background: #EEEBE6;
+    border-color: #B8B0A4;
+    transform: scale(0.97);
+  }
+
+  .add-icon { font-size: 56rpx; font-weight: 300; color: #B0A89A; }
+  .add-text { font-size: 24rpx; color: #B0A89A; }
 }
 
 .location-section, .options-section {
