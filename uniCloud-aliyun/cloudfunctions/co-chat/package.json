@@ -1,0 +1,9 @@
+{
+  "name": "co-chat",
+  "version": "1.0.0",
+  "main": "index.obj.js",
+  "cloudfunction-config": {
+    "memorySize": 512,
+    "timeout": 60
+  }
+}

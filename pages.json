@@ -1,0 +1,137 @@
+{
+  "pages": [
+    {
+      "path": "pages/family-tree/family-tree",
+      "style": {
+        "navigationBarTitleText": "家族树",
+        "enablePullDownRefresh": true,
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/contacts/contacts",
+      "style": {
+        "navigationBarTitleText": "通讯录",
+        "enablePullDownRefresh": true,
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/moments/moments",
+      "style": {
+        "navigationBarTitleText": "朋友圈",
+        "enablePullDownRefresh": true,
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/moments/moments-publish",
+      "style": {
+        "navigationBarTitleText": "发布动态",
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/chat/chat",
+      "style": {
+        "navigationBarTitleText": "消息",
+        "enablePullDownRefresh": true,
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/chat-detail/chat-detail",
+      "style": {
+        "navigationBarTitleText": "聊天",
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "enablePullDownRefresh": true,
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/member/member-detail",
+      "style": {
+        "navigationBarTitleText": "成员详情",
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/member/add-member",
+      "style": {
+        "navigationBarTitleText": "添加成员",
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/login/login",
+      "style": {
+        "navigationBarTitleText": "登录",
+        "navigationBarBackgroundColor": "#2D8B4E",
+        "navigationBarTextStyle": "white",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "家族树",
+    "navigationBarBackgroundColor": "#2D8B4E",
+    "backgroundColor": "#F5F5F5",
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#2D8B4E",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/family-tree/family-tree",
+        "text": "家族树",
+        "iconPath": "static/tabbar/tree.png",
+        "selectedIconPath": "static/tabbar/tree-active.png"
+      },
+      {
+        "pagePath": "pages/contacts/contacts",
+        "text": "通讯录",
+        "iconPath": "static/tabbar/contacts.png",
+        "selectedIconPath": "static/tabbar/contacts-active.png"
+      },
+      {
+        "pagePath": "pages/moments/moments",
+        "text": "朋友圈",
+        "iconPath": "static/tabbar/moments.png",
+        "selectedIconPath": "static/tabbar/moments-active.png"
+      },
+      {
+        "pagePath": "pages/chat/chat",
+        "text": "消息",
+        "iconPath": "static/tabbar/chat.png",
+        "selectedIconPath": "static/tabbar/chat-active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "static/tabbar/mine.png",
+        "selectedIconPath": "static/tabbar/mine-active.png"
+      }
+    ]
+  },
+  "uniIdRouter": {}
+}

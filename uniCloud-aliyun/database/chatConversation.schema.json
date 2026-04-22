@@ -1,0 +1,97 @@
+{
+  "bsonType": "object",
+  "required": ["type", "members"],
+  "permission": {
+    "read": "doc.members.some(userId => userId == auth.uid)",
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "会话ID"
+    },
+    "type": {
+      "bsonType": "string",
+      "description": "会话类型",
+      "enum": ["private", "group"],
+      "title": "会话类型"
+    },
+    "name": {
+      "bsonType": "string",
+      "description": "群聊名称",
+      "title": "群名",
+      "maxLength": 50
+    },
+    "members": {
+      "bsonType": "array",
+      "description": "会话成员列表",
+      "title": "成员列表",
+      "arrayType": "object",
+      "properties": {
+        "userId": {
+          "bsonType": "string",
+          "description": "用户ID",
+          "title": "用户ID"
+        },
+        "joinTime": {
+          "bsonType": "number",
+          "description": "加入时间",
+          "title": "加入时间"
+        }
+      },
+      "required": ["userId", "joinTime"]
+    },
+    "lastMessage": {
+      "bsonType": "object",
+      "description": "最后一条消息",
+      "title": "最后消息",
+      "properties": {
+        "content": {
+          "bsonType": "string",
+          "description": "消息内容"
+        },
+        "type": {
+          "bsonType": "string",
+          "description": "消息类型",
+          "enum": ["text", "image", "location"]
+        },
+        "senderId": {
+          "bsonType": "string",
+          "description": "发送者ID"
+        },
+        "createTime": {
+          "bsonType": "number",
+          "description": "创建时间"
+        }
+      }
+    },
+    "unreadCount": {
+      "bsonType": "object",
+      "description": "未读消息数映射，key为userId",
+      "title": "未读数"
+    },
+    "createTime": {
+      "bsonType": "number",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "updateTime": {
+      "bsonType": "number",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "isDeleted": {
+      "bsonType": "bool",
+      "description": "是否删除",
+      "title": "是否删除",
+      "defaultValue": false
+    }
+  }
+}

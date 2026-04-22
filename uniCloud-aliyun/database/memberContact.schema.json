@@ -1,0 +1,101 @@
+{
+  "bsonType": "object",
+  "required": ["memberId"],
+  "properties": {
+    "memberId": {
+      "bsonType": "string",
+      "description": "关联成员ID"
+    },
+    "phone": {
+      "bsonType": "string",
+      "pattern": "^1[3-9]\\d{9}$",
+      "description": "手机号"
+    },
+    "wechat": {
+      "bsonType": "string",
+      "maxLength": 50,
+      "description": "微信号"
+    },
+    "email": {
+      "bsonType": "string",
+      "maxLength": 100,
+      "description": "邮箱"
+    },
+    "homeAddress": {
+      "bsonType": "object",
+      "properties": {
+        "province": {
+          "bsonType": "string",
+          "maxLength": 50,
+          "description": "省份"
+        },
+        "city": {
+          "bsonType": "string",
+          "maxLength": 50,
+          "description": "城市"
+        },
+        "district": {
+          "bsonType": "string",
+          "maxLength": 50,
+          "description": "区县"
+        },
+        "detail": {
+          "bsonType": "string",
+          "maxLength": 200,
+          "description": "详细地址"
+        },
+        "latitude": {
+          "bsonType": "double",
+          "description": "纬度"
+        },
+        "longitude": {
+          "bsonType": "double",
+          "description": "经度"
+        }
+      },
+      "description": "家庭住址"
+    },
+    "graveAddress": {
+      "bsonType": "object",
+      "properties": {
+        "province": {
+          "bsonType": "string",
+          "maxLength": 50,
+          "description": "省份"
+        },
+        "city": {
+          "bsonType": "string",
+          "maxLength": 50,
+          "description": "城市"
+        },
+        "district": {
+          "bsonType": "string",
+          "maxLength": 50,
+          "description": "区县"
+        },
+        "detail": {
+          "bsonType": "string",
+          "maxLength": 200,
+          "description": "详细地址"
+        },
+        "latitude": {
+          "bsonType": "double",
+          "description": "纬度"
+        },
+        "longitude": {
+          "bsonType": "double",
+          "description": "经度"
+        }
+      },
+      "description": "坟位地址"
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "updateTime": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    }
+  }
+}

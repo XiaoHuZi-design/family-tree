@@ -1,0 +1,97 @@
+{
+  "bsonType": "object",
+  "required": ["familyId", "authorId", "content"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "动态ID"
+    },
+    "familyId": {
+      "bsonType": "string",
+      "description": "所属家族ID",
+      "title": "家族ID",
+      "foreignKey": "family._id"
+    },
+    "authorId": {
+      "bsonType": "string",
+      "description": "作者用户ID",
+      "title": "作者",
+      "foreignKey": "uni-id-users._id"
+    },
+    "content": {
+      "bsonType": "string",
+      "description": "动态内容",
+      "title": "动态内容",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "images": {
+      "bsonType": "array",
+      "description": "图片文件ID列表",
+      "title": "图片列表",
+      "arrayType": "string",
+      "maxItems": 9
+    },
+    "location": {
+      "bsonType": "object",
+      "description": "位置信息",
+      "title": "位置",
+      "properties": {
+        "latitude": {
+          "bsonType": "number",
+          "description": "纬度",
+          "title": "纬度"
+        },
+        "longitude": {
+          "bsonType": "number",
+          "description": "经度",
+          "title": "经度"
+        },
+        "address": {
+          "bsonType": "string",
+          "description": "地址描述",
+          "title": "地址"
+        }
+      }
+    },
+    "likeCount": {
+      "bsonType": "int",
+      "description": "点赞数",
+      "title": "点赞数",
+      "defaultValue": 0
+    },
+    "commentCount": {
+      "bsonType": "int",
+      "description": "评论数",
+      "title": "评论数",
+      "defaultValue": 0
+    },
+    "createTime": {
+      "bsonType": "number",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "updateTime": {
+      "bsonType": "number",
+      "description": "更新时间",
+      "title": "更新时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "isDeleted": {
+      "bsonType": "bool",
+      "description": "是否删除",
+      "title": "是否删除",
+      "defaultValue": false
+    }
+  }
+}

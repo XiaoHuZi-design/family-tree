@@ -1,0 +1,55 @@
+/* 颜色变量 */
+$primary-color: #2D8B4E;
+$primary-light: #E8F5EC;
+$primary-dark: #1E6B3A;
+$secondary-color: #D4A574;
+$secondary-light: #F5EDE4;
+$accent-color: #E8734A;
+$bg-color: #F8F6F2;
+$bg-card: #FFFFFF;
+$text-color: #2C2C2C;
+$text-secondary: #666666;
+$text-light: #999999;
+$border-color: #EAE6E0;
+$white: #FFFFFF;
+$black: #000000;
+$danger-color: #E74C3C;
+$success-color: #27AE60;
+$warning-color: #F39C12;
+
+/* 字体大小 */
+$font-size-xs: 24rpx;
+$font-size-sm: 26rpx;
+$font-size-base: 28rpx;
+$font-size-md: 30rpx;
+$font-size-lg: 32rpx;
+$font-size-xl: 36rpx;
+$font-size-xxl: 40rpx;
+
+/* 间距 */
+$spacing-xs: 8rpx;
+$spacing-sm: 12rpx;
+$spacing-md: 16rpx;
+$spacing-lg: 24rpx;
+$spacing-xl: 32rpx;
+$spacing-xxl: 48rpx;
+
+/* 圆角 */
+$border-radius-sm: 8rpx;
+$border-radius-md: 12rpx;
+$border-radius-lg: 16rpx;
+$border-radius-xl: 24rpx;
+$border-radius-circle: 50%;
+
+/* 阴影 */
+$box-shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+$box-shadow-md: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+$box-shadow-lg: 0 8rpx 24rpx rgba(0, 0, 0, 0.12);
+
+/* 安全区域 */
+$safe-area-inset-bottom: env(safe-area-inset-bottom);
+$safe-area-inset-top: env(safe-area-inset-top);
+
+/* 过渡动画 */
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.15s ease;

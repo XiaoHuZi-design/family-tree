@@ -1,0 +1,51 @@
+{
+  "bsonType": "object",
+  "required": ["momentId", "userId"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "点赞记录ID"
+    },
+    "momentId": {
+      "bsonType": "string",
+      "description": "所属动态ID",
+      "title": "动态ID",
+      "foreignKey": "moments._id"
+    },
+    "userId": {
+      "bsonType": "string",
+      "description": "点赞用户ID",
+      "title": "点赞用户",
+      "foreignKey": "uni-id-users._id"
+    },
+    "createTime": {
+      "bsonType": "number",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    }
+  },
+  "indexes": [
+    {
+      "IndexName": "moment_user_idx",
+      "MgoKeySchema": {
+        "MgoIndexKeys": [
+          {
+            "momentId": 1
+          },
+          {
+            "userId": 1
+          }
+        ],
+        "MgoIsUnique": true
+      }
+    }
+  ]
+}

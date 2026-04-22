@@ -1,0 +1,79 @@
+{
+  "bsonType": "object",
+  "required": ["conversationId", "senderId", "type"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "消息ID"
+    },
+    "conversationId": {
+      "bsonType": "string",
+      "description": "所属会话ID",
+      "title": "会话ID",
+      "foreignKey": "chatConversation._id"
+    },
+    "senderId": {
+      "bsonType": "string",
+      "description": "发送者用户ID",
+      "title": "发送者",
+      "foreignKey": "uni-id-users._id"
+    },
+    "type": {
+      "bsonType": "string",
+      "description": "消息类型",
+      "title": "消息类型",
+      "enum": ["text", "image", "location"]
+    },
+    "content": {
+      "bsonType": "string",
+      "description": "文本消息内容",
+      "title": "消息内容",
+      "maxLength": 1000
+    },
+    "fileID": {
+      "bsonType": "string",
+      "description": "图片消息的文件ID",
+      "title": "文件ID"
+    },
+    "latitude": {
+      "bsonType": "number",
+      "description": "位置消息的纬度",
+      "title": "纬度"
+    },
+    "longitude": {
+      "bsonType": "number",
+      "description": "位置消息的经度",
+      "title": "经度"
+    },
+    "address": {
+      "bsonType": "string",
+      "description": "位置消息的地址描述",
+      "title": "地址"
+    },
+    "isRead": {
+      "bsonType": "bool",
+      "description": "是否已读",
+      "title": "是否已读",
+      "defaultValue": false
+    },
+    "createTime": {
+      "bsonType": "number",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "isDeleted": {
+      "bsonType": "bool",
+      "description": "是否删除",
+      "title": "是否删除",
+      "defaultValue": false
+    }
+  }
+}

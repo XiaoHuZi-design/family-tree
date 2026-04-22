@@ -1,0 +1,60 @@
+{
+  "bsonType": "object",
+  "required": ["momentId", "authorId", "content"],
+  "permission": {
+    "read": false,
+    "create": false,
+    "update": false,
+    "delete": false
+  },
+  "properties": {
+    "_id": {
+      "description": "评论ID"
+    },
+    "momentId": {
+      "bsonType": "string",
+      "description": "所属动态ID",
+      "title": "动态ID",
+      "foreignKey": "moments._id"
+    },
+    "authorId": {
+      "bsonType": "string",
+      "description": "评论者用户ID",
+      "title": "评论者",
+      "foreignKey": "uni-id-users._id"
+    },
+    "content": {
+      "bsonType": "string",
+      "description": "评论内容",
+      "title": "评论内容",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "replyTo": {
+      "bsonType": "string",
+      "description": "被回复的评论ID（可选）",
+      "title": "回复评论ID",
+      "foreignKey": "momentsComment._id"
+    },
+    "replyToAuthor": {
+      "bsonType": "string",
+      "description": "被回复的用户ID（可选）",
+      "title": "被回复用户ID",
+      "foreignKey": "uni-id-users._id"
+    },
+    "createTime": {
+      "bsonType": "number",
+      "description": "创建时间",
+      "title": "创建时间",
+      "forceDefaultValue": {
+        "$env": "now"
+      }
+    },
+    "isDeleted": {
+      "bsonType": "bool",
+      "description": "是否删除",
+      "title": "是否删除",
+      "defaultValue": false
+    }
+  }
+}

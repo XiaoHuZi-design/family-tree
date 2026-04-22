@@ -1,0 +1,40 @@
+{
+  "bsonType": "object",
+  "properties": {
+    "nickname": {
+      "bsonType": "string",
+      "maxLength": 50,
+      "description": "昵称"
+    },
+    "avatar": {
+      "bsonType": "string",
+      "description": "头像URL"
+    },
+    "phone": {
+      "bsonType": "string",
+      "pattern": "^1[3-9]\\d{9}$",
+      "description": "手机号"
+    },
+    "gender": {
+      "bsonType": "int",
+      "minimum": 0,
+      "maximum": 2,
+      "description": "性别（0:未知,1:男,2:女）"
+    },
+    "familyIds": {
+      "bsonType": "array",
+      "items": {
+        "bsonType": "string"
+      },
+      "description": "加入的家族ID列表"
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "updateTime": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    }
+  }
+}

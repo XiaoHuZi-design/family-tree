@@ -1,0 +1,67 @@
+{
+  "bsonType": "object",
+  "required": ["familyId", "name", "generation"],
+  "properties": {
+    "familyId": {
+      "bsonType": "string",
+      "description": "家族ID"
+    },
+    "userId": {
+      "bsonType": "string",
+      "description": "关联用户ID"
+    },
+    "name": {
+      "bsonType": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "description": "成员姓名"
+    },
+    "generation": {
+      "bsonType": "int",
+      "minimum": 1,
+      "maximum": 4,
+      "description": "辈分（1-4代）"
+    },
+    "parentId": {
+      "bsonType": "string",
+      "description": "父节点成员ID（树形结构）"
+    },
+    "avatar": {
+      "bsonType": "string",
+      "description": "头像URL"
+    },
+    "gender": {
+      "bsonType": "int",
+      "minimum": 0,
+      "maximum": 2,
+      "description": "性别（0:未知,1:男,2:女）"
+    },
+    "birthday": {
+      "bsonType": "timestamp",
+      "description": "生日"
+    },
+    "relation": {
+      "bsonType": "string",
+      "maxLength": 50,
+      "description": "与族主关系"
+    },
+    "role": {
+      "bsonType": "string",
+      "enum": ["owner", "admin", "member"],
+      "description": "家族角色"
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "updateTime": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    },
+    "isDeleted": {
+      "bsonType": "bool",
+      "default": false,
+      "description": "是否删除"
+    }
+  }
+}

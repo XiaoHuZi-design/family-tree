@@ -1,0 +1,43 @@
+{
+  "bsonType": "object",
+  "required": ["familyName"],
+  "properties": {
+    "familyName": {
+      "bsonType": "string",
+      "minLength": 2,
+      "maxLength": 20,
+      "description": "家族名称"
+    },
+    "description": {
+      "bsonType": "string",
+      "maxLength": 200,
+      "description": "家族描述"
+    },
+    "ownerId": {
+      "bsonType": "string",
+      "description": "族主用户ID"
+    },
+    "memberCount": {
+      "bsonType": "int",
+      "minimum": 1,
+      "description": "家族成员总数"
+    },
+    "coverImage": {
+      "bsonType": "string",
+      "description": "家族封面图URL"
+    },
+    "createTime": {
+      "bsonType": "timestamp",
+      "description": "创建时间"
+    },
+    "updateTime": {
+      "bsonType": "timestamp",
+      "description": "更新时间"
+    },
+    "isDeleted": {
+      "bsonType": "bool",
+      "default": false,
+      "description": "是否删除"
+    }
+  }
+}
