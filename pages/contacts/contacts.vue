@@ -93,7 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onShow } from 'vue'
 import familyApi from '@/api/family'
 
 interface ContactMember {
@@ -296,6 +296,10 @@ const loadData = async () => {
 }
 
 onMounted(() => {
+  loadData()
+})
+
+onShow(() => {
   loadData()
 })
 </script>

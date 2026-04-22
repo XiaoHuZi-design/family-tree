@@ -222,10 +222,12 @@ module.exports = {
           phone: contact.phone || '',
           wechat: contact.wechat || '',
           email: contact.email || '',
-          homeAddress: contact.homeAddress || {},
-          graveAddress: contact.graveAddress || {},
+          homeAddress: contact.homeAddress || '',
+          graveAddress: contact.graveAddress || '',
+          graveLocation: contact.graveLocation || null,
           createTime: Date.now(),
-          updateTime: Date.now()
+          updateTime: Date.now(),
+          isDeleted: false
         });
       }
 
@@ -292,6 +294,40 @@ module.exports = {
         ...updates,
         updateTime: Date.now()
       });
+
+      // 更新联系方式
+      const { phone, wechat, homeAddress, graveAddress, graveLocation } = data;
+      const contactFields = { phone, wechat, homeAddress, graveAddress, graveLocation };
+      const hasContactUpdate = Object.values(contactFields).some(v => v !== undefined);
+
+      if (hasContactUpdate) {
+        const contactRes = await db.collection('memberContact')
+          .where({ memberId, isDeleted: false })
+          .get();
+
+        if (contactRes.data && contactRes.data.length > 0) {
+          await db.collection('memberContact').doc(contactRes.data[0]._id).update({
+            ...(phone !== undefined && { phone }),
+            ...(wechat !== undefined && { wechat }),
+            ...(homeAddress !== undefined && { homeAddress }),
+            ...(graveAddress !== undefined && { graveAddress }),
+            ...(graveLocation !== undefined && { graveLocation }),
+            updateTime: Date.now()
+          });
+        } else {
+          await db.collection('memberContact').add({
+            memberId,
+            phone: phone || '',
+            wechat: wechat || '',
+            homeAddress: homeAddress || '',
+            graveAddress: graveAddress || '',
+            graveLocation: graveLocation || null,
+            createTime: Date.now(),
+            updateTime: Date.now(),
+            isDeleted: false
+          });
+        }
+      }
 
       return { code: 0, msg: 'success' };
     } catch (e) {
