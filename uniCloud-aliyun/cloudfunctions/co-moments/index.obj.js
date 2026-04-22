@@ -2,28 +2,39 @@
 const db = uniCloud.database();
 const dbCmd = db.command;
 
+// 抽到顶层，避免 this 绑定丢失问题
+async function getContextFromToken() {
+  try {
+    const token = getUniIdToken();
+    if (!token) return { uid: null };
+
+    const userRes = await db.collection('uni-id-users')
+      .where({ token: token, tokenExpired: dbCmd.gt(Date.now()) })
+      .field({ _id: true })
+      .limit(1)
+      .get();
+
+    if (!userRes.data || !userRes.data.length) return { uid: null };
+    return { uid: userRes.data[0]._id };
+  } catch (e) {
+    return { uid: null };
+  }
+}
+
+function getUniIdToken() {
+  try {
+    return typeof this !== 'undefined' && this.getUniIdToken
+      ? this.getUniIdToken()
+      : null;
+  } catch {
+    return null;
+  }
+}
+
 module.exports = {
-  async getContext() {
-    try {
-      const token = this.getUniIdToken && this.getUniIdToken();
-      if (!token) return { uid: null };
-
-      const userRes = await db.collection('uni-id-users')
-        .where({ token: token, tokenExpired: dbCmd.gt(Date.now()) })
-        .field({ _id: true })
-        .limit(1)
-        .get();
-
-      if (!userRes.data || !userRes.data.length) return { uid: null };
-      return { uid: userRes.data[0]._id };
-    } catch (e) {
-      return { uid: null };
-    }
-  },
-
   async getMoments(familyId, page, pageSize) {
     try {
-      const { uid } = await this.getContext();
+      const { uid } = await getContextFromToken.call(this);
       if (!uid) return { code: 401, msg: '未登录' };
       if (!familyId) return { code: 400, msg: 'familyId不能为空' };
 
@@ -82,7 +93,7 @@ module.exports = {
 
   async publishMoment(data) {
     try {
-      const { uid } = await this.getContext();
+      const { uid } = await getContextFromToken.call(this);
       if (!uid) return { code: 401, msg: '未登录' };
 
       const { familyId, content, images, location } = data;
@@ -97,9 +108,13 @@ module.exports = {
       if (!memberRes.data || !memberRes.data.length) return { code: 403, msg: '不是家族成员' };
 
       // 解析 location：前端传字符串则直接存，object 则取 address
-      let locationStr = null
+      let locationData = null
       if (location) {
-        locationStr = typeof location === 'string' ? location : (location.address || '')
+        if (typeof location === 'string' && location.trim()) {
+          locationData = location.trim()
+        } else if (typeof location === 'object' && location.address) {
+          locationData = location.address
+        }
       }
 
       const momentData = {
@@ -107,7 +122,7 @@ module.exports = {
         authorId: uid,
         content: content ? content.trim() : '',
         images: images || [],
-        location: locationStr,
+        location: locationData,
         likeCount: 0,
         commentCount: 0,
         createTime: Date.now(),
@@ -125,7 +140,7 @@ module.exports = {
 
   async likeMoment(momentId) {
     try {
-      const { uid } = await this.getContext();
+      const { uid } = await getContextFromToken.call(this);
       if (!uid) return { code: 401, msg: '未登录' };
       if (!momentId) return { code: 400, msg: 'momentId不能为空' };
 
@@ -154,7 +169,7 @@ module.exports = {
 
   async commentMoment(data) {
     try {
-      const { uid } = await this.getContext();
+      const { uid } = await getContextFromToken.call(this);
       if (!uid) return { code: 401, msg: '未登录' };
 
       const { momentId, content } = data;
@@ -187,7 +202,7 @@ module.exports = {
 
   async deleteMoment(momentId) {
     try {
-      const { uid } = await this.getContext();
+      const { uid } = await getContextFromToken.call(this);
       if (!uid) return { code: 401, msg: '未登录' };
       if (!momentId) return { code: 400, msg: 'momentId不能为空' };
 
@@ -207,7 +222,7 @@ module.exports = {
 
   async getMomentDetail(momentId) {
     try {
-      const { uid } = await this.getContext();
+      const { uid } = await getContextFromToken.call(this);
       if (!uid) return { code: 401, msg: '未登录' };
       if (!momentId) return { code: 400, msg: 'momentId不能为空' };
 
